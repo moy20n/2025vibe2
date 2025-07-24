@@ -1,34 +1,25 @@
-import streamlit as st
-import time
+import pyautogui
 import random
+import time
 
-st.title("⚡ 순발력 테스트 ⚡")
+# 클릭할 좌표 범위 설정 (왼쪽 위, 오른쪽 아래)
+x_min, x_max = 100, 500
+y_min, y_max = 200, 600
 
-if "started" not in st.session_state:
-    st.session_state.started = False
-if "show_button" not in st.session_state:
-    st.session_state.show_button = False
-if "start_time" not in st.session_state:
-    st.session_state.start_time = 0.0
+# 클릭 횟수와 간격
+click_count = 20
+delay = 0.5  # 초 단위
 
-def start_game():
-    st.session_state.started = True
-    st.session_state.show_button = False
-    delay = random.uniform(2, 5)
+print(f"시작 3초 후 무작위 클릭 {click_count}회 실행합니다...")
+time.sleep(3)
+
+for i in range(click_count):
+    x = random.randint(x_min, x_max)
+    y = random.randint(y_min, y_max)
+    pyautogui.moveTo(x, y, duration=0.2)
+    pyautogui.click()
+    print(f"{i+1}번째 클릭: ({x}, {y})")
     time.sleep(delay)
-    st.session_state.start_time = time.time()
-    st.session_state.show_button = True
-    st.experimental_rerun()
 
-def button_clicked():
-    reaction_time = time.time() - st.session_state.start_time
-    st.success(f"🎉 반응속도: {int(reaction_time * 1000)} ms")
-    st.session_state.started = False
-    st.session_state.show_button = False
+print("✅ 클릭 완료!")
 
-if not st.session_state.started:
-    st.button("🟢 시작하기", on_click=start_game)
-elif st.session_state.show_button:
-    st.button("⚡ 지금 클릭!", on_click=button_clicked)
-else:
-    st.info("⏳ 준비 중... 버튼이 뜨면 바로 눌러!")
