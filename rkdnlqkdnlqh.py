@@ -42,7 +42,7 @@ opponent = st.selectbox("상대 선택", list(characters.keys()))
 op_data = characters[opponent]
 
 # 이미지 로딩
-img_path = f"images/{op_data['image']}"
+img_path = f"image/{op_data['image']}"
 if os.path.exists(img_path):
     st.image(img_path, width=300, caption=opponent)
 else:
