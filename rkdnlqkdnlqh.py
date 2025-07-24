@@ -93,4 +93,4 @@ st.write(f"✔ 승: {s['승']}  ❌ 패: {s['패']}  🤝 무: {s['무']}")
 # 랭킹
 st.subheader("📈 상대별 랭킹")
 for name, record in st.session_state.ranking.items():
-    st.write(f"**{name}** - 승: {record['승']}, 패: {record['패']}, 무: {record['무']}") 이렇게 코드 완성했어
+    st.write(f"**{name}** - 승: {record['승']}, 패: {record['패']}, 무: {record['무']}")
