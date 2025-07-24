@@ -1,9 +1,10 @@
 import streamlit as st
 import random
+import os
 
 st.set_page_config(page_title="가위바위보 대전!", page_icon="✊")
 
-# 캐릭터 데이터
+# 캐릭터 정보
 characters = {
     "코난": {"image": "aff4843c-42d0-405b-a4f5-84b652ebaf3b.png", "quote": "내 이름은 에도가와 코난. 이번 판도 이길 수밖에 없겠군."},
     "유미란": {"image": "3a7906e1-bd19-4814-8b9e-7cfedee8fe0c.png", "quote": "좋아, 나 진지하게 한다? 질 생각은 없어."},
@@ -37,22 +38,25 @@ if "last_enemy" not in st.session_state:
 st.title("✊ 가위바위보 대전!")
 st.subheader("🎮 상대를 선택하세요!")
 
-# 상대 선택
 opponent = st.selectbox("상대 선택", list(characters.keys()))
 op_data = characters[opponent]
 
-# 이미지 및 멘트
-st.image(f"images/{op_data['image']}", width=300, caption=f"{opponent}")
+# 이미지 로딩
+img_path = f"images/{op_data['image']}"
+if os.path.exists(img_path):
+    st.image(img_path, width=300, caption=opponent)
+else:
+    st.warning("⚠️ 이미지가 없어요. images 폴더에 파일을 넣어주세요.")
+
 st.info(op_data['quote'])
 
-# 사용자 선택
-st.write("당신의 선택은?")
-user_choice = st.radio("가위, 바위, 보 중 하나!", choices, horizontal=True)
+# 선택
+user_choice = st.radio("당신의 선택은?", choices, horizontal=True)
 
 if st.button("대결 시작!"):
     enemy_choice = random.choice(choices)
 
-    # 승패 판정
+    # 결과 판정
     if user_choice == enemy_choice:
         result = "무"
         msg = "😐 무승부!"
@@ -67,23 +71,24 @@ if st.button("대결 시작!"):
         result = "패"
         msg = "💥 당신이 졌습니다!"
 
-    # 저장
+    # 기록
     st.session_state.last_result = (user_choice, enemy_choice, msg)
     st.session_state.last_enemy = opponent
     st.session_state.score[result] += 1
     st.session_state.ranking[opponent][result] += 1
 
-# 결과 출력
+# 결과 표시
 if st.session_state.last_result:
     uc, ec, msg = st.session_state.last_result
     st.markdown(f"🧑 당신: **{uc}**")
-    st.markdown(f"🧑‍💼 {st.session_state.last_enemy}: **{ec}**")
+    st.markdown(f"🎭 {st.session_state.last_enemy}: **{ec}**")
     st.success(msg)
 
 # 점수판
 st.divider()
 st.subheader("📊 당신의 총 전적")
-st.write(f"✔ 승: {st.session_state.score['승']}  ❌ 패: {st.session_state.score['패']}  🤝 무: {st.session_state.score['무']}")
+s = st.session_state.score
+st.write(f"✔ 승: {s['승']}  ❌ 패: {s['패']}  🤝 무: {s['무']}")
 
 # 랭킹
 st.subheader("📈 상대별 랭킹")
