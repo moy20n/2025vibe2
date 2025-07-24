@@ -2,7 +2,7 @@ import streamlit as st
 import random
 import os
 
-st.set_page_config(page_title="가위바위보 대전!", page_icon="✊")
+st.set_page_config(page_title="가위바위보", page_icon="✊")
 
 # 캐릭터 정보
 characters = {
