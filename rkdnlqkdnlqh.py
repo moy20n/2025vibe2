@@ -27,4 +27,4 @@ if st.button("대결 시작!"):
         result = "💥 컴퓨터가 이겼습니다!"
 
     st.success(result)
-v
+
